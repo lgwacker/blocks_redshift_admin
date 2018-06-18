@@ -4,17 +4,17 @@
   rows:
     - elements: [query_time_histogram, longest_queries]
       height: 300
-      
+
     - elements: [modeling_header]
       height: 100
     - elements: [network_distribution_piechart,network_distribution_top_joins]
       height: 300
-      
+
     - elements: [capacity_header]
       height: 100
     - elements: [queries_and_queued_per_hour]
       height: 300
-      
+
 
   #filters:
   elements:
@@ -26,6 +26,7 @@
     dimensions: [redshift_queries.time_executing_roundup5]
     measures: [redshift_queries.count]
     filters:
+      redshift_queries.substring: "%-- Query%"
       redshift_queries.time_executing: not 0
     sorts: [redshift_queries.time_executing_roundup5]
     limit: '500'
@@ -64,6 +65,8 @@
     model: redshift_model
     explore: redshift_queries
     dimensions: [redshift_queries.query, redshift_queries.substring, redshift_queries.time_executing_roundup1]
+    filters:
+      redshift_queries.substring: "%-- Query%"
     sorts: [redshift_queries.time_executing_roundup1 desc]
     limit: '10'
     column_limit: '50'
@@ -86,7 +89,7 @@
     title_text: "Modeling"
     subtitle_text: ""
     body_text: ""
-    
+
   - name: network_distribution_piechart
     title: Network distribution breakdown
     type: looker_pie
@@ -96,6 +99,7 @@
     measures: [redshift_queries.total_time_executing]
     filters:
       redshift_plan_steps.operation: "%Join%"
+      redshift_queries.substring: "%-- Query%"
     sorts: [redshift_queries.total_time_executing desc]
     limit: '500'
     column_limit: '50'
@@ -117,7 +121,7 @@
       DS_DIST_NONE: "#276300"
       DS_DIST_ALL_INNER: "#5f00cf"
       DS_DIST_ALL_NONE: "#1c8b19"
-    
+
   - name: network_distribution_top_joins
     title: Top Network Distribution Operations
     type: table
@@ -128,6 +132,7 @@
     filters:
       redshift_plan_steps.network_distribution_type: DS^_DIST^_OUTER,DS^_DIST^_ALL^_INNER,DS^_DIST^_BOTH,DS^_BCAST^_INNER
       redshift_plan_steps.operation: "%Join%"
+      redshift_queries.substring: "%-- Query%"
     sorts: [redshift_queries.total_time_executing desc]
     limit: '50'
     column_limit: '50'
@@ -153,14 +158,14 @@
       show_hide: show
       first_last: first
       num_rows: '20'
-    
-    
+
+
   - name: capacity_header
     type: text
     title_text: "Capacity"
     subtitle_text: ""
     body_text: ""
-    
+
   - name: queries_and_queued_per_hour
     title: Queries submitted & queued by hour
     type: looker_line
@@ -168,8 +173,9 @@
     explore: redshift_queries
     dimensions: [redshift_queries.start_hour]
     fill_fields: [redshift_queries.start_hour]
-    measures: [redshift_queries.count, redshift_queries.count_of_queued, redshift_queries.percent_queued,
-      redshift_queries.total_time_in_queue]
+    measures: [redshift_queries.count, redshift_queries.count_of_queued, redshift_queries.percent_queued,redshift_queries.total_time_in_queue]
+    filters:
+     redshift_queries.substring: "%-- Query%"
     dynamic_fields:
     - table_calculation: minutes_queued
       label: Minutes Queued

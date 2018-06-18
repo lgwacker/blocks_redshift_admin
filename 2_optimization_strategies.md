@@ -1,6 +1,6 @@
 ### Optimization Guide
 
-The first point of investigation or periodic review should typically be the performance dashboard <font color="#339">/dashboards/redshift_model::redshift_performance</font>
+The first point of investigation or periodic review should typically be the performance dashboard <a>https://mundipagg.looker.com/dashboards/redshift_model::redshift_performance</a>
 
 ![image](https://user-images.githubusercontent.com/9888083/35290094-05510524-001e-11e8-8fc2-e88d9f43cd06.png)
 
